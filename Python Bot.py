@@ -1,9 +1,13 @@
+from flask import Flask, request
+
 import base64
 import hashlib
 import hmac
 
 import json
-import requests
+#import requests
+
+app = Flask(__name__)
 
 access_token = 'qgdntcUqQibpcFZwTLOarjqCmPtXS/d5E8zovhoZS/Rd7e1Ue0JLVMzSGLwQB6r4+rDpddQcEBRILXlWXA4X80ZNWRToRf1ex1oi2RqR/jXjb/iNQbHjlZmxnqLfgKDnnlSa1KWeGtWqxptHoD0dGgdB04t89/1O/w1cDnyilFU='
 
@@ -12,8 +16,17 @@ access_token = 'qgdntcUqQibpcFZwTLOarjqCmPtXS/d5E8zovhoZS/Rd7e1Ue0JLVMzSGLwQB6r4
 ##with open('JSonBody.json') as json_file:
 ##    events = json.load(json_file)
     #pprint(events)
+    
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
 
-events = open('//input')
+    # get request body as text
+    events = request.get_data(as_text=True)
+    app.logger.info("Request body: " + events)
+
+#events = requests.get(as_text=True)
 
 
 # Validate parsed JSon data
@@ -54,4 +67,7 @@ if(events != None):
             
             #print(requests)
             
+if __name__ == "__main__":
+    app.run()
+    
                        
